@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +22,12 @@ public class HttpController {
 
     @Autowired
     MongoTemplate mongoTemplate;
+
+    @RequestMapping("/1")
+    public String index(Model model, HttpServletResponse response) {
+        model.addAttribute("name", "simonsfan");
+        return "/test";
+    }
 
     @GetMapping("/SensorData1")
     List<SensorData1> getSensorData1(){
@@ -59,52 +67,54 @@ public class HttpController {
     @PostMapping("/SensorData1")
     SensorData1 postSensorData1(@RequestParam String name,
                                 @RequestParam Integer value,
-                                @RequestParam Date time){
+                                @RequestParam  Long timestamp){
         keepLastSensorData1();
 
         SensorData1 sensorData1 = new SensorData1();
         sensorData1.setName(name);
         sensorData1.setValue(value);
-        sensorData1.setTime(time);
+        sensorData1.setTime(new Date(timestamp));
+        System.out.println("OK");
+        System.out.println(sensorData1);
         return mongoTemplate.insert(sensorData1);
     }
 
     @PostMapping("/SensorData2")
     SensorData2 postSensorData2(@RequestParam String name,
                                 @RequestParam Integer value,
-                                @RequestParam Date time){
+                                @RequestParam Long timestamp){
         keepLastSensorData2();
 
         SensorData2 SensorData2 = new SensorData2();
         SensorData2.setName(name);
         SensorData2.setValue(value);
-        SensorData2.setTime(time);
+        SensorData2.setTime(new Date(timestamp));
         return mongoTemplate.insert(SensorData2);
     }
 
     @PostMapping("/SensorData3")
     SensorData3 postSensorData3(@RequestParam String name,
                                 @RequestParam Integer value,
-                                @RequestParam Date time){
+                                @RequestParam Long timestamp){
         keepLastSensorData3();
 
         SensorData3 SensorData3 = new SensorData3();
         SensorData3.setName(name);
         SensorData3.setValue(value);
-        SensorData3.setTime(time);
+        SensorData3.setTime(new Date(timestamp));
         return mongoTemplate.insert(SensorData3);
     }
 
     @PostMapping("/SensorData4")
     SensorData4 postSensorData4(@RequestParam String name,
                                 @RequestParam Integer value,
-                                @RequestParam Date time){
+                                @RequestParam Long timestamp){
         keepLastSensorData4();
 
         SensorData4 SensorData4 = new SensorData4();
         SensorData4.setName(name);
         SensorData4.setValue(value);
-        SensorData4.setTime(time);
+        SensorData4.setTime(new Date(timestamp));
         return mongoTemplate.insert(SensorData4);
     }
 
@@ -119,7 +129,7 @@ public class HttpController {
 
     void keepLastSensorData2(){
         Query query = new Query();
-        query.skip(10);
+        query.skip(9);
         query.with(Sort.by(
                 Sort.Order.desc("time")
         ));
@@ -128,7 +138,7 @@ public class HttpController {
 
     void keepLastSensorData3(){
         Query query = new Query();
-        query.skip(10);
+        query.skip(9);
         query.with(Sort.by(
                 Sort.Order.desc("time")
         ));
@@ -137,7 +147,7 @@ public class HttpController {
 
     void keepLastSensorData4(){
         Query query = new Query();
-        query.skip(10);
+        query.skip(9);
         query.with(Sort.by(
                 Sort.Order.desc("time")
         ));

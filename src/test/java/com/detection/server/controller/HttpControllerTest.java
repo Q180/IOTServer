@@ -39,7 +39,7 @@ class HttpControllerTest {
         this.mockMvc.perform(MockMvcRequestBuilders.post("/SensorData1")
                         .param("name", "sensor1")
                         .param("value", "12")
-                        .param("time", time.toString())
+                        .param("timestamp", Long.toString(time.getTime()))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(MockMvcResultHandlers.print());
     }
@@ -51,7 +51,43 @@ class HttpControllerTest {
             this.mockMvc.perform(MockMvcRequestBuilders.post("/SensorData1")
                     .param("name", "sensor1")
                     .param("value", ""+i)
-                    .param("time", time.toString())
+                    .param("timestamp", Long.toString(time.getTime()))
+                    .contentType(MediaType.APPLICATION_JSON_VALUE));
+        }
+    }
+
+    @Test
+    void postManySensorData2() throws Exception {
+        for(int i = 16; i >= 0; i--){
+            Date time = new Date();
+            this.mockMvc.perform(MockMvcRequestBuilders.post("/SensorData2")
+                    .param("name", "sensor2")
+                    .param("value", ""+i)
+                    .param("timestamp", Long.toString(time.getTime()))
+                    .contentType(MediaType.APPLICATION_JSON_VALUE));
+        }
+    }
+
+    @Test
+    void postManySensorData3() throws Exception {
+        for(int i = 16; i >= 0; i--){
+            Date time = new Date();
+            this.mockMvc.perform(MockMvcRequestBuilders.post("/SensorData3")
+                    .param("name", "sensor3")
+                    .param("value", ""+i)
+                    .param("timestamp", Long.toString(time.getTime()))
+                    .contentType(MediaType.APPLICATION_JSON_VALUE));
+        }
+    }
+
+    @Test
+    void postManySensorData4() throws Exception {
+        for(int i = 16; i >= 0; i--){
+            Date time = new Date();
+            this.mockMvc.perform(MockMvcRequestBuilders.post("/SensorData4")
+                    .param("name", "sensor4")
+                    .param("value", ""+i)
+                    .param("timestamp", Long.toString(time.getTime()))
                     .contentType(MediaType.APPLICATION_JSON_VALUE));
         }
     }

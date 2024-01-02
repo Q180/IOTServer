@@ -30,6 +30,6 @@ class ServerApplicationTests {
     @Test
     void test(){
         Date date = new Date();
-        System.out.println(date.toString());
+        System.out.println(date.getTime());
     }
 }

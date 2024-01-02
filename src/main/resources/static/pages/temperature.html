@@ -1,0 +1,72 @@
+<!--
+	此示例下载自 https://echarts.apache.org/examples/zh/editor.html?c=scatter-simple
+-->
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+<head>
+    <meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+
+
+<script type="text/javascript" src="https://registry.npmmirror.com/echarts/5.4.3/files/dist/echarts.min.js"></script>
+
+<script type="text/javascript">
+    var dom = document.getElementById('container');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    option = {
+        xAxis: {},
+        yAxis: {},
+        series: [
+            {
+                symbolSize: 20,
+                data: [
+                    [1, 0],
+                    [2, 0],
+                    [3, 0],
+                    [4, 0],
+                    [5, 0],
+                    [6, 0],
+                    [7, 0],
+                    [8, 0],
+                    [9, 0],
+                    [10, 0]
+                ],
+                type: 'scatter'
+            }
+        ]
+    };
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    function myFunction(){
+        fetch("/SensorData1", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((response) => response.json())
+            .then((updatedData) => {
+                for(var i = 0; i < 10 ; i++){
+                    // option.series[0].data[i][0]=updatedData[i].time.slice(11,19);
+                    option.series[0].data[i][1]=updatedData[i].value;
+                }
+                myChart.setOption(option);
+            });
+    }
+    setInterval(myFunction, 1000);
+
+    window.addEventListener('resize', myChart.resize);
+</script>
+</body>
+</html>
