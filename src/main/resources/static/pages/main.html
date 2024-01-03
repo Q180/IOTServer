@@ -13,101 +13,103 @@
     <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../css/style.css">
     <style type="text/css">
-    .el-main{
-        position: absolute;
-        top: 70px;
-        bottom: 0px;
-        left: 200px;
-        right: 10px;
-        padding: 0;
-    }
+        .el-main {
+            position: absolute;
+            top: 70px;
+            bottom: 0px;
+            left: 200px;
+            right: 10px;
+            padding: 0;
+        }
     </style>
 </head>
 <body class="hold-transition skin-purple sidebar-mini">
-    <div id="app">
+<div id="app">
+    <el-container>
+        <el-header class="main-header" style="height:70px;">
+            <nav class="navbar navbar-static-top" :class=''>
+                <!-- Logo -->
+                <span style="font-family:Microsoft YaHei;font-size:40px">室内环境监测系统</span>
+                </a>
+                <div class="right-menu">
+                    <el-dropdown class="avatar-container right-menu-item" trigger="click">
+                        <div class="avatar-wrapper">
+                            <img src="../img/touxiang.png" class="user-avatar">
+                            {{name}}
+                        </div>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item divided>
+                                <el-button round type="danger" size="mini" @click="updatepassword()">修改密码
+                                </el-button>
+                            </el-dropdown-item>
+                            <el-dropdown-item divided>
+                                <el-button round type="danger" size="mini" @click="logout()">退出登录</el-button>
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </div>
+            </nav>
+        </el-header>
         <el-container>
-            <el-header  class="main-header" style="height:70px;">
-                <nav class="navbar navbar-static-top" :class=''>
-                    <!-- Logo -->
-                        <span style="font-family:Microsoft YaHei;font-size:40px">室内环境监测系统</span>
-                    </a>
-                    <div class="right-menu">
-                        <el-dropdown class="avatar-container right-menu-item" trigger="click">
-                            <div class="avatar-wrapper">
-                                <img src="../img/touxiang.png" class="user-avatar">
-                                {{name}}
-                            </div>
-                            <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item divided>
-                                    <el-button  round type="danger" size="mini" @click="updatepassword()">修改密码</el-button>
-                                </el-dropdown-item>
-                                <el-dropdown-item divided>
-                                    <el-button round type="danger" size="mini" @click="logout()" >退出登录</el-button>
-                                    </el-dropdown-item>
-                            </el-dropdown-menu>
-                        </el-dropdown>
-                    </div>
-                </nav>
-            </el-header>
+            <el-aside width="width: 200px; min-height: calc(100vh - 50px)">
+                <el-menu>
+                    <el-submenu v-for="menu in menuList" :index="menu.path">
+                        <template slot="title">
+                            <i class="fa" :class="menu.icon"></i>
+                            {{menu.title}}
+                        </template>
+                        <template v-for="child in menu.children">
+                            <el-menu-item :index="child.path">
+                                <a :href="child.linkUrl" target="right">{{child.title}}</a>
+                            </el-menu-item>
+                        </template>
+                    </el-submenu>
+                </el-menu>
+            </el-aside>
             <el-container>
-                <el-aside width="width: 200px; min-height: calc(100vh - 50px)">
-                    <el-menu>
-                        <el-submenu v-for="menu in menuList" :index="menu.path">
-                            <template slot="title">
-                                <i class="fa" :class="menu.icon"></i>
-                                {{menu.title}}
-                            </template>
-                            <template v-for="child in menu.children">
-                                <el-menu-item :index="child.path">
-                                    <a :href="child.linkUrl" target="right">{{child.title}}</a>
-                                </el-menu-item>
-                            </template>
-                        </el-submenu>
-                    </el-menu>
-                </el-aside>
-                <el-container>
-                    <iframe name="right" class="el-main" src="device.html" width="100%" height="90%" frameborder="0"></iframe>
-                </el-container>
+                <iframe name="right" class="el-main" src="device.html" width="100%" height="90%"
+                        frameborder="0"></iframe>
             </el-container>
         </el-container>
+    </el-container>
 
-        <!-- 修改密码项 -->
-        <div class="add-form">
-            <el-dialog title="修改密码项" :visible.sync="dialogFormVisible4Edit">
-                <el-form ref="dataEditForm" :model="formData" :rules="rules" label-position="right" label-width="100px">
-                    <el-row>
-                        <el-col :span="12">
-                            <el-form-item label="原密码" prop="oldpwd">
-                                <el-input type="password"  v-model="formData.oldpwd"/>
-                            </el-form-item>
-                        </el-col>
+    <!-- 修改密码项 -->
+    <div class="add-form">
+        <el-dialog title="修改密码项" :visible.sync="dialogFormVisible4Edit">
+            <el-form ref="dataEditForm" :model="formData" :rules="rules" label-position="right" label-width="100px">
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="原密码" prop="oldpwd">
+                            <el-input type="password" v-model="formData.oldpwd"/>
+                        </el-form-item>
+                    </el-col>
 
-                    </el-row>
+                </el-row>
 
 
-                    <el-row>
-                        <el-col :span="12">
-                            <el-form-item label="新密码" prop="newpwd">
-                                <el-input  prefix-icon="el-icon-edit" type="password" v-model="formData.newpwd"/>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="12">
-                            <el-form-item label="确认密码" prop="confirm">
-                                <el-input prefix-icon="el-icon-edit" type="password" v-model="formData.confirm"/>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="新密码" prop="newpwd">
+                            <el-input prefix-icon="el-icon-edit" type="password" v-model="formData.newpwd"/>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="确认密码" prop="confirm">
+                            <el-input prefix-icon="el-icon-edit" type="password" v-model="formData.confirm"/>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
 
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogFormVisible4Edit = false">取消</el-button>
-                    <el-button type="primary" @click="handleEdit()">确定</el-button>
-                </div>
-            </el-dialog>
-        </div>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible4Edit = false">取消</el-button>
+                <el-button type="primary" @click="handleEdit()">确定</el-button>
+            </div>
+        </el-dialog>
     </div>
+</div>
 </body>
 <!-- 引入组件库 -->
 <script src="../js/vue.js"></script>
@@ -117,55 +119,55 @@
 <script>
     new Vue({
         el: '#app',
-        data:{
-            name:"dss",
-            menuList:[
+        data: {
+            name: "dss",
+            menuList: [
                 {
                     "path": "3",
                     "title": "环境数据监控",
-                    "icon":"fa-book",
+                    "icon": "fa-book",
                     "children": [
-                       {
+                        {
                             "path": "/3-2",
                             "title": "温度",
-                            "linkUrl":"temperature.html",
-                            "children":[]
+                            "linkUrl": "temperature.html",
+                            "children": []
                         },
                         {
                             "path": "/3-3",
                             "title": "湿度",
-                            "linkUrl":"humidity.html",
-                            "children":[]
+                            "linkUrl": "humidity.html",
+                            "children": []
                         },
-                       {
+                        {
                             "path": "/3-4",
                             "title": "光照",
-                            "linkUrl":"light.html",
-                            "children":[]
+                            "linkUrl": "light.html",
+                            "children": []
                         },
                         {
                             "path": "/3-5",
                             "title": "二氧化碳浓度",
-                            "linkUrl":"PM2.5.html",
-                            "children":[]
+                            "linkUrl": "PM2.5.html",
+                            "children": []
                         },
                     ]
                 },
                 {
                     "path": "6",
                     "title": "设备管理",
-                    "icon":"fa-dashboard",
+                    "icon": "fa-dashboard",
                     "children": [
                         {
                             "path": "/1-1",
                             "title": "设备详情",
-                            "linkUrl":"device.html",
-                            "children":[]
+                            "linkUrl": "device.html",
+                            "children": []
                         }
                     ]
                 },
             ],
-            dialogFormVisible4Edit:false,//编辑表单是否可见
+            dialogFormVisible4Edit: false,//编辑表单是否可见
             rules: {
                 oldpwd: [
                     {required: true, message: '旧密码不可为空', trigger: 'blur'},
@@ -179,46 +181,48 @@
             },
             formData: {},//表单数据
         },
-        create(){
+        create() {
             //var item = window.localStorage.getItem("username");
 
             //this.changename(item);
         },
-        mounted(){
+        mounted() {
             var item = window.localStorage.getItem("username");
             if (item != "admin") {
                 alert("非法访问！");
                 window.history.go(-1);
             }
-            this.formData.username=item;
+            this.formData.username = item;
+            item = window.localStorage.getItem("loginName");
+            console.log(item)
             this.changename(item);
         },
-        methods:{
+        methods: {
 
             changename(item) {
                 //console.log(item);
-                this.name=item;
+                this.name = item;
             },
-            logout(){
+            logout() {
                 //this.index();
-                this.$confirm("确定退出吗？","提示",{//确认框
+                this.$confirm("确定退出吗？", "提示", {//确认框
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
-                }).then(()=>{
+                }).then(() => {
                     //用户点击确定按钮，发送ajax请求
                     axios.get("/user/logout").then(res => {
-                        if(res.data.flag){
+                        if (res.data.flag) {
                             //执行成功
                             //弹出成功提示信息
                             this.$message({
-                                type:'success',
-                                message:res.data.message,
+                                type: 'success',
+                                message: res.data.message,
 
                             });
 
 
-                        }else{
+                        } else {
                             //执行失败
                             //this.$alert("借阅失败,此书目前已没有数量了!!");
                             this.$message.error(res.data.message);
@@ -226,12 +230,12 @@
                         }
 
                     });
-                }).catch(()=>{
+                }).catch(() => {
                     this.$message({
-                        type:'info',
-                        message:'操作已取消'
+                        type: 'info',
+                        message: '操作已取消'
                     });
-                }).finally(()=>{
+                }).finally(() => {
                     //alert(1111);
                     this.index();
                 });
@@ -245,27 +249,26 @@
                 //this.formData.confirm=null;
                 //alert( this.formData.username);
             },
-            updatepassword(){
+            updatepassword() {
                 //弹出编辑窗口
                 this.dialogFormVisible4Edit = true;
                 this.resetForm();
-                var item = window.localStorage.getItem("username");
-                this.formData.username=item;
+                var item = window.localStorage.getItem("loginName");
+                this.formData.username = item;
                 //回显数据，发送ajax请求根据ID查询当前数据
-               /* axios.get("/book/findBookById?bookid=" + row.bookid).then((res) => {
-                    if(res.data.flag){
-                        //进行回显，基于VUE的数据绑定实现
-                        this.formData = res.data.data;
-                    }else{
-                        //查询失败，弹出提示
-                        this.$message.error(res.data.message);
-                    }
-                    this.dialogFormVisible4Edit = false;
-                });*/
+                /* axios.get("/book/findBookById?bookid=" + row.bookid).then((res) => {
+                     if(res.data.flag){
+                         //进行回显，基于VUE的数据绑定实现
+                         this.formData = res.data.data;
+                     }else{
+                         //查询失败，弹出提示
+                         this.$message.error(res.data.message);
+                     }
+                     this.dialogFormVisible4Edit = false;
+                 });*/
 
             },
-            handleEdit(){
-
+            handleEdit() {
                 if (this.formData.newpwd !== this.formData.confirm) {
                     this.$message({
                         type: "error",
@@ -273,29 +276,48 @@
                     })
                     return
                 }
+                // console.log(this.formData.username);
+                // console.log(this.formData.oldpwd);
+                // console.log(window.localStorage.getItem("loginPWD"));
+                if (this.formData.oldpwd !== window.localStorage.getItem("loginPWD")) {
+                    this.$message({
+                        type: "error",
+                        message: '原密码错误！'
+                    })
+                    return
+                }
 
                 this.$refs['dataEditForm'].validate((valid) => {
                     if (valid) {
-                        axios.post("/user/updatepwd", this.formData).then(res => {
-                            if (res.data.flag) {
-                                //弹出提示信息
-                                this.$message({
-                                    type: 'success',
-                                    message: res.data.message
-
-                                });
-                            }
-                            else
-                            {
-                                this.$message({
-                                    type: 'error',
-                                    message: res.data.message
-
-                                });
-                            }
-                            this.dialogFormVisible4Edit = false;
+                        fetch("/UpdatePWD", {
+                            method: "POST",
+                            body: JSON.stringify({
+                                username: this.formData.username,
+                                password: this.formData.oldpwd,
+                                newpwd: this.formData.newpwd
+                            }),
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
                         })
-                    }else{
+                            .then((response) => response.json())
+                            .then((response) => {
+                                // console.log(response);
+                                if (response) {
+                                    //弹出提示信息
+                                    this.$message({
+                                        type: 'success',
+                                        message: '修改成功'
+                                    });
+                                } else {
+                                    this.$message({
+                                        type: 'error',
+                                        message: '原密码不正确'
+                                    });
+                                }
+                                this.dialogFormVisible4Edit = false;
+                            })
+                    } else {
                         //校验不通过
                         this.$message.error("数据校验失败，请检查你的输入信息是否正确！");
                         return false;
@@ -303,16 +325,16 @@
 
                 })
             },
-            index(){
+            index() {
 
                 window.localStorage.removeItem("username");
-                window.location.href="../index.html";
+                window.location.href = "../index.html";
             }
         },
     });
-    $(function() {
-            var wd = 200;
-            $(".el-main").css('width', $('body').width() - wd + 'px');
+    $(function () {
+        var wd = 200;
+        $(".el-main").css('width', $('body').width() - wd + 'px');
     });
 </script>
 </html>

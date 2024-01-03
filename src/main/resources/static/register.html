@@ -111,28 +111,34 @@
 <body>
 <div id="app">
     <div class="wrap">
-        <div >
+        <div>
             <div style="width: 100%; height: 100vh; overflow: hidden">
                 <div style="width: 400px; margin: 100px auto">
                     <div style="font-size: 30px; text-align: center; padding: 30px 0">欢迎注册</div>
                     <el-form ref="form" :model="form" size="normal" :rules="rules">
                         <el-form-item prop="username">
-                            <el-input prefix-icon="el-icon-edit"  placeholder="请输入用户名" v-model="form.username"></el-input>
+                            <el-input prefix-icon="el-icon-edit" placeholder="请输入用户名"
+                                      v-model="form.username"></el-input>
                         </el-form-item>
 
                         <el-form-item prop="phone">
-                            <el-input prefix-icon="el-icon-edit"  placeholder="请输入手机号" v-model="form.phone"></el-input>
+                            <el-input prefix-icon="el-icon-edit" placeholder="请输入手机号"
+                                      v-model="form.phone"></el-input>
                         </el-form-item>
                         <el-form-item prop="password">
-                            <el-input prefix-icon="el-icon-edit" placeholder="请输入密码" v-model="form.password" type="password" ></el-input>
+                            <el-input prefix-icon="el-icon-edit" placeholder="请输入密码" v-model="form.password"
+                                      type="password"></el-input>
                         </el-form-item>
                         <el-form-item prop="confirm">
-                            <el-input prefix-icon="el-icon-edit"  placeholder="请确认密码"v-model="form.confirm" type="password"></el-input>
+                            <el-input prefix-icon="el-icon-edit" placeholder="请确认密码" v-model="form.confirm"
+                                      type="password"></el-input>
                         </el-form-item>
                         <el-form-item>
                             <el-button style="width: 100%" type="primary" @click="register">注册</el-button>
                         </el-form-item>
-                        <el-form-item><el-button type="text" @click="judgeURL">&lt;&lt;返回登录 </el-button></el-form-item>
+                        <el-form-item>
+                            <el-button type="text" @click="judgeURL">&lt;&lt;返回登录</el-button>
+                        </el-form-item>
                     </el-form>
                 </div>
             </div>
@@ -147,7 +153,8 @@
 <script type="text/javascript" src="./js/jquery.min.js"></script>
 <script src="./js/axios-0.18.0.js"></script>
 <!--网页动态背景——随鼠标变换的动态线条-->
-<script type="text/javascript" src="https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>　　
+<script type="text/javascript" src="https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+　　
 <script>
     var vue = new Vue({
         el: '#app',
@@ -165,9 +172,9 @@
                     confirm: [
                         {required: true, message: '请确认密码', trigger: 'blur'},
                     ],
-                    phone:[
-                        { required: true, message: '手机号不可为空', trigger: 'blur' },
-                        { min: 11, max: 11, message: '长度为11个', trigger: 'blur' }
+                    phone: [
+                        {required: true, message: '手机号不可为空', trigger: 'blur'},
+                        {min: 11, max: 11, message: '长度为11个', trigger: 'blur'}
                     ]
                 },
 
@@ -191,38 +198,51 @@
 
                 this.$refs['form'].validate((valid) => {
                     if (valid) {
-                        axios.post("/user/register", this.form).then(res => {
-                            if (res.data.flag) {
-                                //弹出提示信息
-                                this.$message({
-                                    type:'success',
-                                    message:res.data.message
-
-                                });
-                                this.$confirm('是否跳转到登录页面?', '注册成功', {
-                                    confirmButtonText: '确定',
-                                    cancelButtonText: '取消',
-                                    type: 'warning'
-                                }).then(() => {
-                                    window.location.href="./index.html";
-                                }).catch(() => {
-                                    this.$message({
-                                        type: 'info',
-                                        message: '已取消跳转'
-                                    });
-                                }); //登录成功之后进行页面的跳转，跳转到主页
-                            } else {
-                                this.$message({
-                                    type: "error",
-                                    message: res.data.message
-                                })
-                            }
+                        fetch("/User", {
+                            method: "POST",
+                            body: JSON.stringify({
+                                username: this.form.username,
+                                password: this.form.password
+                            }),
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
                         })
+                            .then((response) => response.json())
+                            .then(response => {
+                                console.log(response);
+                                if (response) {
+                                    //弹出提示信息
+                                    this.$message({
+                                        type: 'success',
+                                        message: '注册成功'
+
+                                    });
+                                    this.$confirm('是否跳转到登录页面?', '注册成功', {
+                                        confirmButtonText: '确定',
+                                        cancelButtonText: '取消',
+                                        type: 'warning'
+                                    }).then(() => {
+                                        window.location.href = "./index.html";
+                                    }).catch(() => {
+                                        this.$message({
+                                            type: 'info',
+                                            message: '已取消跳转'
+                                        });
+                                    }); //登录成功之后进行页面的跳转，跳转到主页
+                                }
+                                else {
+                                    this.$message({
+                                        type: 'error',
+                                        message: '注册失败'
+                                    })
+                                }
+                            })
                     }
                 })
             },
-            judgeURL () {
-                window.location.href="./index.html";
+            judgeURL() {
+                window.location.href = "./index.html";
             },
 
         }
@@ -263,6 +283,7 @@
             }, time)
         })
     }
+
     rainAnimation(12)
 </script>
 

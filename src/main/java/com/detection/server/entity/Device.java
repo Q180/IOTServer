@@ -1,5 +1,6 @@
 package com.detection.server.entity;
 
+
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -7,8 +8,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 
 @Data
-@Document("SensorData1")
-public class SensorData1 {
+@Document("Devices")
+public class Device {
     /**
      *
      */
@@ -23,10 +24,25 @@ public class SensorData1 {
     /**
      *
      */
-    private Date time;
+    private String Size;
 
     /**
      *
      */
-    private Integer value;
+    private String manufacturer;
+
+    /**
+     *
+     */
+    private String information;
+
+    /**
+     *
+     */
+    private String category;
+
+    /**
+     *
+     */
+    private Integer lifetime;
 }

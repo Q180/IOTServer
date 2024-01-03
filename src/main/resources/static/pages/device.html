@@ -21,19 +21,20 @@
     <div class="app-container">
         <div class="box">
             <div class="filter-container">
-                <el-input placeholder="设备名称" v-model="pagination.queryString" style="width: 200px;" class="filter-item"></el-input>
+                <el-input placeholder="设备名称" v-model="pagination.queryString" style="width: 200px;"
+                          class="filter-item"></el-input>
                 <el-button @click="findPage()" class="dalfBut">查询</el-button>
                 <el-button type="primary" class="butT" @click="handleCreate()">新增</el-button>
                 <el-button type="success" class="butT" @click="handleExport()">删除</el-button>
             </div>
-            <el-table  size="small" current-row-key="id" :data="dataList" stripe highlight-current-row>
+            <el-table size="small" current-row-key="id" :data="dataList" stripe highlight-current-row>
                 <el-table-column type="index" align="center" label="序号"></el-table-column>
                 <el-table-column prop="name" label="名称" align="center"></el-table-column>
                 <el-table-column prop="specification" label="规格" align="center"></el-table-column>
                 <el-table-column prop="manufacturer" label="生产商" align="center"></el-table-column>
-                <el-table-column width="500" prop="introduction"  label="简介" align="center"></el-table-column>
-                <el-table-column  width="50" prop="classid" label="类别" align="center"></el-table-column>
-                <el-table-column  width="50" prop="lifetime" label="寿命" align="center"></el-table-column>
+                <el-table-column width="500" prop="introduction" label="简介" align="center"></el-table-column>
+                <el-table-column width="50" prop="classid" label="类别" align="center"></el-table-column>
+                <el-table-column width="50" prop="lifetime" label="寿命" align="center"></el-table-column>
             </el-table>
             <div class="pagination-container">
                 <el-pagination
@@ -49,7 +50,8 @@
             <!-- 新增标签弹层 -->
             <div class="add-form">
                 <el-dialog title="新增设备" :visible.sync="dialogFormVisible">
-                    <el-form ref="dataAddForm" :model="formData" :rules="rules" label-position="right" label-width="100px">
+                    <el-form ref="dataAddForm" :model="formData" :rules="rules" label-position="right"
+                             label-width="100px">
                         <el-row>
                             <el-col :span="12">
                                 <el-form-item label="名称" prop="bookname">
@@ -73,7 +75,7 @@
                             </el-col>
                             <el-col :span="12">
                                 <el-form-item label="类别">
-                                    <el-select v-model="formData.classid" >
+                                    <el-select v-model="formData.classid">
                                         <el-option label="温度" value="0"></el-option>
                                         <el-option label="湿度" value="1"></el-option>
                                         <el-option label="光照" value="2"></el-option>
@@ -110,7 +112,8 @@
             <!-- 编辑标签弹层 -->
             <div class="add-form">
                 <el-dialog title="编辑检查项" :visible.sync="dialogFormVisible4Edit">
-                    <el-form ref="dataEditForm" :model="formData" :rules="rules" label-position="right" label-width="100px">
+                    <el-form ref="dataEditForm" :model="formData" :rules="rules" label-position="right"
+                             label-width="100px">
                         <el-row>
                             <el-col :span="12">
                                 <el-form-item label="设备编号" prop="deviceid">
@@ -156,7 +159,7 @@
                         <el-row>
                             <el-col :span="12">
                                 <el-form-item label="简介">
-                                    <el-input  type="textarea" v-model="formData.introduction"/>
+                                    <el-input type="textarea" v-model="formData.introduction"/>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -180,34 +183,34 @@
 <script>
     var vue = new Vue({
         el: '#app',
-        data:{
+        data: {
             pagination: {//分页相关模型数据
                 currentPage: 1,//当前页码
-                pageSize:5,//每页显示的记录数
-                total:0,//总记录数
-                queryString:null,//查询条件
-                username:""
+                pageSize: 5,//每页显示的记录数
+                total: 0,//总记录数
+                queryString: null,//查询条件
+                username: ""
             },
             dataList: [],//当前页要展示的分页列表数据
             formData: {},//表单数据
             dialogFormVisible: false,//增加表单是否可见
-            dialogFormVisible4Edit:false,//编辑表单是否可见
+            dialogFormVisible4Edit: false,//编辑表单是否可见
             rules: {//校验规则
-                bookname: [{ required: true, message: '名称为必填项', trigger: 'blur' }],
-                author: [{ required: true, message: '规格为必填项', trigger: 'blur' }]
+                bookname: [{required: true, message: '名称为必填项', trigger: 'blur'}],
+                author: [{required: true, message: '规格为必填项', trigger: 'blur'}]
             }
         },
 //钩子函数，VUE对象初始化完成后自动执行
         created() {
             var item = window.localStorage.getItem("username");
-            this.username=item;
+            this.username = item;
             // this.findPage();//VUE对象初始化完成后调用分页查询方法，完成分页查询
             this.fetchData();//获取数据
         },
         methods: {
             //从后端获取数据
-            fetchData(){
-                fetch("/SensorData1", {
+            fetchData() {
+                fetch("/Devices", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -215,54 +218,58 @@
                 })
                     .then((response) => response.json())
                     .then((updatedData) => {
-                        for(var i = 0; i < 4 ; i++){
-                            console.log("OK")
-                            console.log(updatedData[i].value)
-                            this.dataList.push(
-                                {
-                                    index:1,name:"光照传感器",specification:"大型设备",manufacturer:"可达公司",introduction:"这是一个传感器",classid:"光照",lifetime:updatedData[i].value
-                                }
-                            )
+                        for (var i = 0; i < 4; i++) {
+                            // console.log("OK")
+                            // console.log(updatedData[i]);
+                            this.dataList.push({
+                                index: i,
+                                name: updatedData[i].name,
+                                specification: updatedData[i].size,
+                                manufacturer: updatedData[i].manufacturer,
+                                introduction: updatedData[i].information,
+                                classid: updatedData[i].category,
+                                lifetime: updatedData[i].lifetime
+                            })
                         }
                     });
             },
             //导出
-            handleExport(){
+            handleExport() {
                 //location.href="/user/export"
-                this.$confirm("确定删除当前设备信息吗？","提示",{//确认框
+                this.$confirm("确定删除当前设备信息吗？", "提示", {//确认框
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'info'
-                }).then(()=>{
+                }).then(() => {
                     //用户点击确定按钮，发送ajax请求，
                     // axios.setHeaderValue()
-                    axios.post("/book/export",{
+                    axios.post("/book/export", {
                         //params: data,
                         /* headers: {
                              'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8'
                          },*/
                         //contentType:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
                     }).then(() => {
-                        location.href="/book/export";
+                        location.href = "/book/export";
                         //执行成功
                         //弹出成功提示信息
                         this.$message({
-                            type:'success',
-                            message:"删除成功"
+                            type: 'success',
+                            message: "删除成功"
                         });
 
 
                     });
-                }).catch(()=>{
+                }).catch(() => {
                     this.$message({
-                        type:'info',
-                        message:'操作已取消'
+                        type: 'info',
+                        message: '操作已取消'
                     });
                 });
             },
             returnPage() {
-                if(this.pagination.total - 1 === (this.pagination.current - 1) *
-                    this.pagination. pageSize && this.total !== 0) {
+                if (this.pagination.total - 1 === (this.pagination.current - 1) *
+                    this.pagination.pageSize && this.total !== 0) {
                     this.pagination.currentPage-- // 当前页减一,跳转到上一页
                 }
             },
@@ -270,16 +277,16 @@
             handleEdit() {
                 //进行表单校验
                 this.$refs['dataEditForm'].validate((valid) => {
-                    if(valid){
+                    if (valid) {
                         //表单校验通过，可以提交数据
-                        axios.post("/book/edit",this.formData).then((res) => {
-                            if(res.data.flag){
+                        axios.post("/book/edit", this.formData).then((res) => {
+                            if (res.data.flag) {
                                 //弹出成功提示信息
                                 this.$message({
-                                    type:'success',
-                                    message:res.data.message
+                                    type: 'success',
+                                    message: res.data.message
                                 });
-                            }else{
+                            } else {
                                 //执行失败
                                 this.$message.error(res.data.message);
                             }
@@ -289,7 +296,7 @@
                             //隐藏编辑窗口
                             this.dialogFormVisible4Edit = false;
                         });
-                    }else{
+                    } else {
                         //表单校验不通过
                         this.$message.error("表单数据校验失败!");
                         return false;
@@ -297,29 +304,29 @@
                 });
             },
             //添加
-            handleAdd () {
+            handleAdd() {
                 //进行表单校验
                 this.$refs['dataAddForm'].validate((valid) => {
-                    if(valid){
+                    if (valid) {
                         //表单校验通过，发生ajax请求，将录入的数据提交到后台进行处理
                         console.log(this.formData);
-                        axios.post("/book/add",this.formData).then((res) => {
+                        axios.post("/book/add", this.formData).then((res) => {
                             //关闭新增窗口
                             this.dialogFormVisible = false;
-                            if(res.data.flag){//执行成功
+                            if (res.data.flag) {//执行成功
                                 //新增成功后，重新调用分页查询方法，查询出最新的数据
                                 this.findPage();
                                 //弹出提示信息
                                 this.$message({
-                                    message:res.data.message,
-                                    type:'success'
+                                    message: res.data.message,
+                                    type: 'success'
                                 });
-                            }else{//执行失败
+                            } else {//执行失败
                                 //弹出提示
                                 this.$message.error(res.data.message);
                             }
                         });
-                    }else{
+                    } else {
                         //校验不通过
                         this.$message.error("数据校验失败，请检查你的输入信息是否正确！");
                         return false;
@@ -330,11 +337,11 @@
             findPage() {
                 //发送ajax请求，提交分页相关请求参数（页码、每页显示记录数、查询条件）
                 var param = {
-                    currentPage:this.pagination.currentPage,
-                    pageSize:this.pagination.pageSize,
+                    currentPage: this.pagination.currentPage,
+                    pageSize: this.pagination.pageSize,
                     queryString: this.pagination.queryString
                 };
-                axios.post("/book/findPage",param).then((res)=>{
+                axios.post("/book/findPage", param).then((res) => {
                     //解析Controller响应回的数据，为模型数据赋值
                     this.pagination.total = res.data.total;
                     // alert(res.data);

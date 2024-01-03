@@ -1,18 +1,17 @@
 package com.detection.server.controller;
 
-import com.detection.server.entity.SensorData1;
-import com.detection.server.entity.SensorData2;
-import com.detection.server.entity.SensorData3;
-import com.detection.server.entity.SensorData4;
+import com.detection.server.entity.*;
+import com.detection.server.vo.NewPWD;
+import com.detection.server.vo.User;
 import com.mongodb.client.result.DeleteResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.ui.Model;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 
@@ -23,10 +22,57 @@ public class HttpController {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    @RequestMapping("/1")
-    public String index(Model model, HttpServletResponse response) {
-        model.addAttribute("name", "simonsfan");
-        return "/test";
+    @PostMapping("/test")
+    public String test(@RequestParam String name,
+                       @RequestParam Integer value,
+                       @RequestParam Long timestamp){
+        System.out.println(timestamp);
+        return "OK";
+    }
+
+    @GetMapping("/Devices")
+    public List<Device> getAllDevice(){
+        return mongoTemplate.findAll(Device.class);
+    }
+
+    @PostMapping("/User")
+    @ResponseBody
+    public String addUser(@RequestBody User user){
+        UserInfo userInfo = new UserInfo();
+        userInfo.setName(user.getUsername());
+        userInfo.setPassword(user.getPassword());
+        UserInfo userInfo1 = mongoTemplate.insert(userInfo);
+        if(userInfo1 != null) return "true";
+        else return "false";
+    }
+
+    @PostMapping("/ValidateUser")
+    @ResponseBody
+    public String validateUser(@RequestBody User user){
+        Query query = new Query(Criteria.where("name").is(user.getUsername()));
+        query.addCriteria(Criteria.where("password").is(user.getPassword()));
+        UserInfo userInfo = mongoTemplate.findOne(query, UserInfo.class);
+        if(userInfo==null) return "false";
+        return "true";
+    }
+
+    @PostMapping("/UpdatePWD")
+    @ResponseBody
+    public String validateUser(@RequestBody NewPWD newPWD){
+        Query query = new Query(Criteria.where("name").is(newPWD.getUsername()));
+        query.addCriteria(Criteria.where("password").is(newPWD.getPassword()));
+        UserInfo userInfo = mongoTemplate.findOne(query, UserInfo.class);
+//        System.out.println(newPWD.getUsername());
+//        System.out.println(newPWD.getPassword());
+//        System.out.println(newPWD.getNewpwd());
+//        System.out.println(userInfo);
+        if(userInfo == null) return "false";
+        else{
+            Update update = new Update();
+            update.set("password", newPWD.getNewpwd());
+            mongoTemplate.updateFirst(query, update, UserInfo.class);
+            return "true";
+        }
     }
 
     @GetMapping("/SensorData1")
